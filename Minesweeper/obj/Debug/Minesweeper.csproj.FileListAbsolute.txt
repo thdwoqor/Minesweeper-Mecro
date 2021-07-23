@@ -1,0 +1,13 @@
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\bin\Debug\Minesweeper.exe.config
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\bin\Debug\Minesweeper.exe
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\bin\Debug\Minesweeper.pdb
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\bin\Debug\WebDriver.dll
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\bin\Debug\WebDriver.xml
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.csprojAssemblyReference.cache
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.Form1.resources
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.Properties.Resources.resources
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.csproj.GenerateResource.cache
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.csproj.CopyComplete
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.exe
+C:\Users\Administrator\source\repos\Minesweeper\Minesweeper\obj\Debug\Minesweeper.pdb
