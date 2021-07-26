@@ -36,18 +36,21 @@ namespace Minesweeper
 
             _options = new ChromeOptions();
             //_options.AddArgument("--headless");
-            _options.AddArgument("disable-gpu");
-            _options.AddArgument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)" + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
+            //_options.AddArgument("disable-gpu");
+            //_options.AddArgument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)" + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
+            _options.AddArgument("disable-infobars");
+            _options.AddArgument("--disable-extensions");
+            
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            m=new MinesweeperMecro[9, 9];
+            m=new MinesweeperMecro[16, 30];
             _driver = new ChromeDriver(@"chrom", _options);
-            _driver.Navigate().GoToUrl("https://minesweeper.online/ko/start/1");  // 웹 사이트에 접속합니다.
+            _driver.Navigate().GoToUrl("https://minesweeper.online/ko/start/3");  // 웹 사이트에 접속합니다.
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
 
-            
             try
             {
                 while (_driver.FindElement(By.XPath("//*[@id='init_loading']")).Enabled)
