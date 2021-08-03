@@ -12,7 +12,17 @@ namespace Minesweeper
 {
     public class Mecro
     {
-        public void Init(ChromeDriver _driver, MinesweeperMecro[,] m)
+        public MinesweeperMecro[,] m;
+        public ChromeDriver _driver;
+
+        public Mecro(MinesweeperMecro[,] m, ChromeDriver _driver)
+        {
+            this.m = m;
+            this._driver = _driver;
+        }
+
+
+        public void Init()
         {
             //var element = _driver.FindElements(By.XPath("//*[@id='A43']/div"));
 
@@ -34,8 +44,6 @@ namespace Minesweeper
                 m[row, column].center_e = e1;
                 m[row, column].zero_count = 0;
                 
-
-
                 if (e_value == "cell size24 hd_closed hd_flag")
                 {
                     m[row, column].center_n = 7;
@@ -93,7 +101,7 @@ namespace Minesweeper
             }
         }
 
-        public void set(MinesweeperMecro[,] m)
+        public void set()
         {
             for (int i = 0; i < 16; i++)
             {
@@ -112,7 +120,7 @@ namespace Minesweeper
             }
         }
 
-        public void click_event(ChromeDriver _driver, MinesweeperMecro[,] m)
+        public void click_event()
         {
             bool not_find = true;
 
@@ -120,264 +128,15 @@ namespace Minesweeper
             {
                 for (int j = 0; j < 30; j++)
                 {
-                    if ( m[i, j].center_n == 0)
-                    {
-                        for (int z = 0; z < 3; z++)
-                        {
-                            for (int k = 0; k < 3; k++)
-                            {
-                                if (isValidPosition(i - 1 + z, j - 1 + k) && m[i-1+z, j-1+k].center_n == 8)
-                                {
+                    if(centerzero(i, j))
+                        not_find = false;
 
-                                    not_find = false;
+                    if(bombfinded(i,j))
+                        not_find = false;
 
-                                    Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i - 1 + z, j - 1 + k].center_e).Click().Perform();
-                                    m[i, j].zero_count--;
-                                    m[i - 1 + z, j - 1 + k].center_n = 9;
+                    if (onetwoone(i, j)) 
+                        not_find = false;
 
-
-                                    for (int a = 0; a < 3; a++)
-                                    {
-                                        for (int b = 0; b < 3; b++)
-                                        {
-                                            if (a == 1 && b == 1)
-                                                continue;
-                                            if (isValidPosition(i - 2 + z + a, j - 2 + k + b))
-                                                m[i - 2 + z+a, j - 2 + k+b].zero_count--;
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-
-                    if (m[i, j].zero_count == m[i, j].center_n && m[i, j].center_n<6&& m[i, j].center_n > 0)
-                    {
-                        for (int z = 0; z < 3; z++)
-                        {
-                            for (int k = 0; k < 3; k++)
-                            {
-                                if (isValidPosition(i - 1 + z, j - 1 + k) && m[i - 1 + z, j - 1 + k].center_n == 8)
-                                {
-
-                                    not_find = false;
-
-                                    Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i - 1 + z, j - 1 + k].center_e).ContextClick().Perform();
-                                    //m[i, j].center_n--;
-                                    //m[i, j].zero_count--;
-                                    m[i - 1 + z, j - 1 + k].center_n = 7;
-
-                                    for (int a = 0; a < 3; a++)
-                                    {
-                                        for (int b = 0; b < 3; b++)
-                                        {
-                                            if (a == 1 && b == 1)
-                                                continue;
-                                            if (isValidPosition(i - 2 + z + a, j - 2 + k + b))
-                                            {
-                                                m[i - 2 + z + a, j - 2 + k + b].zero_count--;
-                                                if (m[i - 2 + z + a, j - 2 + k + b].center_n >= 1 && m[i - 2 + z + a, j - 2 + k + b].center_n <= 6)
-                                                    m[i - 2 + z + a, j - 2 + k + b].center_n--;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    //121
-
-                    if (m[i, j].center_n == 2&& isValidPosition(i, j - 1)&& isValidPosition(i, j + 1) && (m[i, j-1].center_n == 1 && m[i, j+1].center_n == 1))
-                    {
-                        if (isValidPosition(i - 1, j - 1) && m[i-1, j-1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i - 1, j - 1].center_e).ContextClick().Perform();
-                            m[i - 1, j - 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 2  + a, j - 2 + b))
-                                    {
-                                        m[i - 2  + a, j - 2  + b].zero_count--;
-                                        if (m[i - 2  + a, j - 2  + b].center_n >= 1 && m[i - 2  + a, j - 2  + b].center_n <= 6)
-                                            m[i - 2  + a, j - 2  + b].center_n--;
-                                    }
-                                }
-                            }
-
-                        }
-                        if (isValidPosition(i - 1, j + 1) && m[i - 1, j + 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i - 1, j + 1].center_e).ContextClick().Perform();
-                            m[i - 1, j + 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 2 + a, j - 1 + b))
-                                    {
-                                        m[i - 2 + a, j - 1 + b].zero_count--;
-                                        if (m[i - 2 + a, j - 1 + b].center_n >= 1 && m[i - 2 + a, j - 1 + b].center_n <= 6)
-                                            m[i - 2 + a, j - 1 + b].center_n--;
-                                    }
-                                }
-                            }
-
-                        }
-
-                        if (isValidPosition(i + 1, j - 1) && m[i + 1, j - 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i + 1, j - 1].center_e).ContextClick().Perform();
-                            m[i + 1, j - 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 1 + a, j - 2 + b))
-                                    {
-                                        m[i - 1 + a, j - 2 + b].zero_count--;
-                                        if (m[i - 1 + a, j - 2 + b].center_n >= 1 && m[i - 1 + a, j - 2 + b].center_n <= 6)
-                                            m[i - 1 + a, j - 2 + b].center_n--;
-                                    }
-                                }
-                            }
-
-                        }
-                        if (isValidPosition(i + 1, j + 1) && m[i + 1, j + 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i + 1, j + 1].center_e).ContextClick().Perform();
-                            m[i + 1, j + 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 1 + a, j - 1 + b))
-                                    {
-                                        m[i - 1 + a, j - 1 + b].zero_count--;
-                                        if (m[i - 1 + a, j - 1 + b].center_n >= 1 && m[i - 1 + a, j - 1 + b].center_n <= 6)
-                                            m[i - 1 + a, j - 1 + b].center_n--;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (m[i, j].center_n == 2 && isValidPosition(i - 1, j) && isValidPosition(i + 1, j) && (m[i - 1, j].center_n == 1 && m[i + 1, j].center_n == 1))
-                    {
-                        if (isValidPosition(i - 1, j - 1) && m[i - 1, j - 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i - 1, j - 1].center_e).ContextClick().Perform();
-                            m[i - 1, j - 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 2 + a, j - 2 + b))
-                                    {
-                                        m[i - 2 + a, j - 2 + b].zero_count--;
-                                        if (m[i - 2 + a, j - 2 + b].center_n >= 1 && m[i - 2 + a, j - 2 + b].center_n <= 6)
-                                            m[i - 2 + a, j - 2 + b].center_n--;
-                                    }
-                                }
-                            }
-
-                        }
-                        if (isValidPosition(i + 1, j - 1) && m[i + 1, j - 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i + 1, j - 1].center_e).ContextClick().Perform();
-                            m[i + 1, j - 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 1 + a, j - 2 + b))
-                                    {
-                                        m[i - 1 + a, j - 2 + b].zero_count--;
-                                        if (m[i - 1 + a, j - 2 + b].center_n >= 1 && m[i - 1 + a, j - 2 + b].center_n <= 6)
-                                            m[i - 1 + a, j - 2 + b].center_n--;
-                                    }
-                                }
-                            }
-
-                        }
-                        if (isValidPosition(i - 1, j + 1) && m[i - 1, j + 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i - 1, j + 1].center_e).ContextClick().Perform();
-                            m[i - 1, j + 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 2 + a, j - 1 + b))
-                                    {
-                                        m[i - 2 + a, j - 1 + b].zero_count--;
-                                        if (m[i - 2 + a, j - 1 + b].center_n >= 1 && m[i - 2 + a, j - 1 + b].center_n <= 6)
-                                            m[i - 2 + a, j - 1 + b].center_n--;
-                                    }
-                                }
-                            }
-
-                        }
-                        if (isValidPosition(i + 1, j + 1) && m[i + 1, j + 1].center_n == 8)
-                        {
-                            not_find = false;
-
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[i + 1, j + 1].center_e).ContextClick().Perform();
-                            m[i + 1, j + 1].center_n = 7;
-
-                            for (int a = 0; a < 3; a++)
-                            {
-                                for (int b = 0; b < 3; b++)
-                                {
-                                    if (a == 1 && b == 1)
-                                        continue;
-                                    if (isValidPosition(i - 1 + a, j - 1 + b))
-                                    {
-                                        m[i - 1 + a, j - 1 + b].zero_count--;
-                                        if (m[i - 1 + a, j - 1 + b].center_n >= 1 && m[i - 1 + a, j - 1 + b].center_n <= 6)
-                                            m[i - 1 + a, j - 1 + b].center_n--;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
 
@@ -396,38 +155,195 @@ namespace Minesweeper
                         }
                     }
                 }
-
+                Debug.WriteLine($"{x} {y} {m[x, y].center_n} {m[x, y].zero_count} *");
+                
                 while (true)
                 {
+                    
                     Random rand = new Random();
-                    x = x - 1 + rand.Next(0, 3);
-                    y = y - 1 + rand.Next(0, 3);
-                    if (isValidPosition(x, y))
+                    int xx = x - 1 + rand.Next(0, 3);
+                    int yy = y - 1 + rand.Next(0, 3);
+
+                    if (isValidPosition(xx, yy)&& m[xx, yy].center_n==8)
                     {
-                        Debug.WriteLine($"{x} {y} 찾지 못했습니다.");
-                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x, y].center_e).Click().Perform();
+                        Debug.WriteLine($"{xx} {yy} **");
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[xx, yy].center_e).Click().Perform();
                         break;
                     }
 
                 }
             }
-                    /*
-                    Random rand = new Random();
-                    int x = rand.Next(0, 16);
-                    int y = rand.Next(0, 30);
-
-                    while (true)
-                    {
-                        if (m[x, y].center_n == 8)
-                        {
-                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x, y].center_e).Click().Perform();
-                            return;
-                        }
-                        x = rand.Next(0, 16);
-                        y = rand.Next(0, 30);
-                    }
-                    */
         }
+
+        private bool bombfinded(int x, int y)
+        {
+            bool change = false;
+            if (m[x, y].zero_count == m[x, y].center_n && m[x, y].center_n <= 6 && m[x, y].center_n > 0)
+            {
+                for (int a = 0; a < 3; a++)
+                {
+                    for (int b = 0; b < 3; b++)
+                    {
+                        if (isValidPosition(x - 1 + a, y - 1 + b) && m[x - 1 + a, y - 1 + b].center_n == 8)
+                        {
+                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x - 1 + a, y - 1 + b].center_e).ContextClick().Perform();
+
+                            m[x - 1 + a, y - 1 + b].center_n = 7;
+
+                            Refresh(x - 1 + a, y - 1 + b, 7);
+
+                            change = true;
+                        }
+                    }
+                }
+            }
+            if(change)
+                return true;
+            else
+                return false;
+        }
+
+        private bool centerzero(int x, int y)
+        {
+            bool change = false;
+            if (m[x, y].center_n == 0)
+            {
+                for (int a = 0; a < 3; a++)
+                {
+                    for (int b = 0; b < 3; b++)
+                    {
+                        if (isValidPosition(x - 1 + a, y - 1 + b) && m[x - 1 + a, y - 1 + b].center_n == 8)
+                        {
+                            Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x - 1 + a, y - 1 + b].center_e).Click().Perform();
+
+                            m[x - 1 + a, y - 1 + b].center_n = 9;
+                            Refresh(x - 1 + a, y - 1 + b, 8);
+                            change = true;
+                        }
+                    }
+                }
+            }
+            if (change)
+                return true;
+            else
+                return false;
+        }
+
+        private bool onetwoone(int x, int y)
+        {
+            if (x < 0 || y < 0 || x + 2 >= 16 || y + 2 >= 30) return false;
+            bool change = false;
+            if ((m[x + 1, y].center_n == 1 && m[x + 1, y + 1].center_n == 2 && m[x + 1, y + 2].center_n == 1))
+            {
+                //■□■
+                // 1 2 1
+                //□□□
+                if (m[x + 2, y].center_n != 8  && m[x + 2, y + 2].center_n != 8)
+                {
+                    if (m[x, y].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x, y].center_e).ContextClick().Perform();
+                        m[x, y].center_n = 7;
+                        Refresh(x, y, 7);
+                        change = true;
+                    }
+                    if (m[x, y+2].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x, y+2].center_e).ContextClick().Perform();
+                        m[x, y + 2].center_n = 7;
+                        Refresh(x, y + 2, 7);
+                        change = true;
+                    }
+                }
+                //□□□
+                // 1 2 1
+                //■□■
+                if (m[x , y].center_n != 8  && m[x , y + 2].center_n != 8)
+                {
+                    if (m[x+2, y].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x + 2, y].center_e).ContextClick().Perform();
+                        m[x + 2, y].center_n = 7;
+                        Refresh(x + 2, y, 7);
+                        change = true;
+                    }
+                    if (m[x+2, y + 2].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x + 2, y + 2].center_e).ContextClick().Perform();
+                        m[x + 2, y + 2].center_n = 7;
+                        Refresh(x + 2, y + 2, 7);
+                        change = true;
+                    }
+                }
+            }
+
+            if ((m[x , y+1].center_n == 1 && m[x + 1, y+1 ].center_n == 2 && m[x + 2, y+1].center_n == 1))
+            {
+                //□ 1 ■
+                //□ 2 □
+                //□ 1 ■
+                if (m[x , y].center_n != 8  && m[x + 2, y].center_n != 8)
+                {
+                    if (m[x, y+2].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x, y + 2].center_e).ContextClick().Perform();
+                        m[x, y + 2].center_n = 7;
+                        Refresh(x, y + 2, 7);
+                        change = true;
+                    }
+                    if (m[x+2, y + 2].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x + 2, y + 2].center_e).ContextClick().Perform();
+                        m[x + 2, y + 2].center_n = 7;
+                        Refresh(x + 2, y + 2, 7);
+                        change = true;
+                    }
+                }
+                //■ 1 □
+                //□ 2 □
+                //■ 1 □
+                if (m[x, y+2].center_n != 8  && m[x+2, y + 2].center_n != 8)
+                {
+                    if (m[x , y].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x, y].center_e).ContextClick().Perform();
+                        m[x, y].center_n = 7;
+                        Refresh(x, y, 7);
+                        change = true;
+                    }
+                    if (m[x + 2, y].center_n == 8)
+                    {
+                        Actions actionProvider = new Actions(_driver); actionProvider.MoveToElement(m[x + 2, y].center_e).ContextClick().Perform();
+                        m[x + 2, y].center_n = 7;
+                        Refresh(x + 2, y,7);
+                        change = true;
+                    }
+                }
+            }
+            if(change)
+                return true;
+            else
+                return false ;
+        }
+
+        public void Refresh(int x,int y,int num)
+        {
+            for (int a = 0; a < 3; a++)
+            {
+                for (int b = 0; b < 3; b++)
+                {
+                    if (a == 1 && b == 1)
+                        continue;
+                    if (isValidPosition(x - 1 + a, y - 1 + b))
+                    {
+                        m[x - 1 + a, y - 1 + b].zero_count--;
+                        if (m[x - 1 + a, y - 1 + b].center_n >= 1 && m[x - 1 + a, y - 1 + b].center_n <= 6&& num==7)
+                            m[x - 1 + a, y - 1 + b].center_n--;
+                    }
+                }
+            }
+        }
+
         private bool isValidPosition(int x, int y)
         {
             if (x < 0 || y < 0 || x >= 16 || y >= 30) return false;
@@ -439,8 +355,6 @@ namespace Minesweeper
             
             if (isValidPosition(x, y))
             {
-                //m[z, k].border_n[x - z + 1, y - k + 1] = m[x, y].center_n;
-                //m[z, k].border_e[x - z + 1, y - k + 1] = m[x, y].center_e;
                 if (m[x, y].center_n == 8)
                     m[z, k].zero_count++;
                 if (m[x, y].center_n == 7)

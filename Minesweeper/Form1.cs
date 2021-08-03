@@ -25,7 +25,7 @@ namespace Minesweeper
 
         private MinesweeperMecro[,] m;
 
-        Mecro Mecro1 = new Mecro();
+        Mecro Mecro1;
 
         public Form1()
         {
@@ -46,7 +46,17 @@ namespace Minesweeper
 
         private void button1_Click(object sender, EventArgs e)
         {
-            m=new MinesweeperMecro[16, 30];
+
+        }
+        
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bunifuImageButton1_Click(object sender, EventArgs e)
+        {
+            m = new MinesweeperMecro[16, 30];
             _driver = new ChromeDriver(@"chrom", _options);
             _driver.Navigate().GoToUrl("https://minesweeper.online/ko/start/3");  // 웹 사이트에 접속합니다.
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
@@ -56,41 +66,25 @@ namespace Minesweeper
                 while (_driver.FindElement(By.XPath("//*[@id='init_loading']")).Enabled)
                 {
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
             }
-
-            //Thread.Sleep(1000);
-
         }
-        
-        private void button2_Click(object sender, EventArgs e)
+
+        private void bunifuImageButton2_Click(object sender, EventArgs e)
         {
+            Mecro1 = new Mecro(m, _driver);
             while (true)
             {
-                Mecro1.Init(_driver, m);
-                //Debug.WriteLine("1번");
-                Mecro1.set(m);
-                //Debug.WriteLine("2번");
-                Mecro1.click_event(_driver, m);
-                //Debug.WriteLine("3번");
-                /*
-                for (int i = 0; i < 9; i++)
-                {
-                    for (int j = 0; j < 9; j++)
-                    {
-                        Debug.Write(m[i, j].center_n);
-                        //textBox1.Text += m[i, j].center_n;
-                    }
-                    Debug.Write("\r\n");
-                    //textBox1.Text += "\r\n";
-                }
-                Debug.Write("\r\n");
-                */
+                Mecro1.Init();
+
+                Mecro1.set();
+
+                Mecro1.click_event();
+
             }
         }
-
-       
     }
 }
 
